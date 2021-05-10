@@ -7,9 +7,9 @@ For this implementation I used Tensorflow v2.4.1 and Keras Functional API.
 ## Output examples
 Here are some output examples extracted using my pre-trained model which is provided in this repository. The music tracks are the following 
 
-[Ιουλία Καραπατάκη - Μπιρ Αλλάχ (Σαν βγαίνει ο Χότζας στο τζαμί) (exact time interval 90-120 sec.)](https://www.youtube.com/watch?v=nv2rp5JCWj0) - [Vocals](https://drive.google.com/file/d/195HOyaQi12PSyn3J7ry-Bx7IEKuBjDfE/view?usp=sharing) - [Accompaniment](https://drive.google.com/file/d/1--TvTstFaiiHsO5zYySpYlGQy-5W5TAC/view?usp=sharing) <br />   
+[Ιουλία Καραπατάκη - Μπιρ Αλλάχ (Σαν βγαίνει ο Χότζας στο τζαμί) (exact time interval 90-120 sec.)](https://www.youtube.com/watch?v=nv2rp5JCWj0) - [Vocals](https://drive.google.com/file/d/195HOyaQi12PSyn3J7ry-Bx7IEKuBjDfE/view?usp=sharing) - [Accompaniment](https://drive.google.com/file/d/1--TvTstFaiiHsO5zYySpYlGQy-5W5TAC/view?usp=sharing) <br />
 [Villagers of Ioannina City - Perdikomata (exact time interval 360-390 sec.)](https://www.youtube.com/watch?v=MsCB4iocPJE) - [Vocals](https://drive.google.com/file/d/1-JkdoGPFZ5hy31A6OGR58o1mzWJfC3j5/view?usp=sharing) - [Accompaniment](https://drive.google.com/file/d/1-GNxHFLwEoq1GabRHUZXmWUqKftQxN2z/view?usp=sharing) <br />
-[Boston - More Than A Feeling 45-75 sec.](https://www.youtube.com/watch?v=oR4uKcvQbGQ) - [Vocals](https://drive.google.com/file/d/1-EHxr9P_uSxp3YU9pnBZVcFJQDzJldzZ/view?usp=sharing) -  [Accompaniment](https://drive.google.com/file/d/1-7i-TyArhaqc4_fPO9JTMjeizufP4Og3/view?usp=sharing)    <br />
+[Boston - More Than A Feeling 45-75 sec.](https://www.youtube.com/watch?v=oR4uKcvQbGQ) - [Vocals](https://drive.google.com/file/d/1-EHxr9P_uSxp3YU9pnBZVcFJQDzJldzZ/view?usp=sharing) -  [Accompaniment](https://drive.google.com/file/d/1-7i-TyArhaqc4_fPO9JTMjeizufP4Og3/view?usp=sharing) <br />
 [Porcupine Tree - Trains (exact time interval 70-100 sec.)](https://www.youtube.com/watch?v=0UHwkfhwjsk) - [Vocals](https://drive.google.com/file/d/1-2kXKGhOGIGsA0_fMqNGdaDp_DhtzrKn/view?usp=sharing) - [Accompaniment](https://drive.google.com/file/d/1-024Sv4KaZupkpTupty80E7c7pl07HWZ/view?usp=sharing)  <br />
 [TCTS - Not Ready For Love (feat. Maya B) (exact time interval 30-60 sec)](https://www.youtube.com/watch?v=kQY6dzXLBnI) = [Vocals](https://drive.google.com/file/d/1-LA2KWoOSfxzTPEe0cUdulYoEhrpVJAK/view?usp=sharing) - [Accompaniment](https://drive.google.com/file/d/1-L7lJbzqmcu1blbqnPKVfEoDYA1RnVww/view?usp=sharing) <br />
 
@@ -44,7 +44,7 @@ I randomly cut 30 second chunks, downsample to 22.05kHz and apply Short Time Fou
 ## Architecture
 2D Convolutional layers with (3x12) kernels are used for feature extraction. Max Pooling layers for downsampling the frequency dimension(a process similar to MFCCs extraction). Dropout layers and Early Stopping for regularization and Dense layers, which have been successfully used for music source separation. The output is a soft mask, thus the final layer is activated by a sigmoid function.
 
-![Model's Architecture](https://github.com/gelobs/Automated-Audio-Source-Extraction-From-Recordings-Using-Deep-Neural-Networks/img/architecture.png?raw=true)
+![Model's Architecture](https://github.com/gelobs/Automated-Audio-Source-Extraction-From-Recordings-Using-Deep-Neural-Networks/blob/master/img/architecture.png?raw=true)
 
 ## Training
 The model is trained to minimize the binary cross-entropy of between the ideal binary mask and the estimated source in the time-frequency domain for the validation set. The ideal binary mask is created by comparing mixture's and vocals' magnitude spectrograms. 

@@ -5,7 +5,7 @@ This repository contains an updated code version, related to my diploma thesis "
 For this implementation I used Tensorflow v2.4.1 and Keras Functional API.
 
 ## Output examples
-Here are some output examples extracted using my pre-trained model which is provided in this repository. The separation output examples are located in "Samples" folder. The music tracks are the following 
+Here are some output examples extracted using my pre-trained model which is provided in this repository. The music tracks are the following 
 
 [Ιουλία Καραπατάκη - Μπιρ Αλλάχ (Σαν βγαίνει ο Χότζας στο τζαμί) (exact time interval 90-120 sec.)](https://www.youtube.com/watch?v=nv2rp5JCWj0) - [Vocals](https://drive.google.com/file/d/195HOyaQi12PSyn3J7ry-Bx7IEKuBjDfE/view?usp=sharing) - [Accompaniment](https://drive.google.com/file/d/1--TvTstFaiiHsO5zYySpYlGQy-5W5TAC/view?usp=sharing)    
 [Villagers of Ioannina City - Perdikomata (exact time interval 360-390 sec.)](https://www.youtube.com/watch?v=MsCB4iocPJE) - [Vocals](https://drive.google.com/file/d/1-JkdoGPFZ5hy31A6OGR58o1mzWJfC3j5/view?usp=sharing) - [Accompaniment](https://drive.google.com/file/d/1-GNxHFLwEoq1GabRHUZXmWUqKftQxN2z/view?usp=sharing) 
@@ -42,7 +42,7 @@ This method borrows much from these two papers [1](https://pdfs.semanticscholar.
 I randomly cut 30 second chunks, downsample to 22.05kHz and apply Short Time Fourier Transform to time domain signals. Then I feed the model with 9 overlapping magnitude spectograms. Their overlap is 1 frame.
 
 ## Architecture
-2D Convolutional layers with (3x12) kernels are used for feature extraction. Max Pooling layers for downsampling the frequency dimensions(a process similar to MFCCs extraction). Dropout layers and Early Stopping for regularization and Dense layers, which have been successfully used for music source separation. The output is a soft mask, thus the final layer is activated by a sigmoid function.
+2D Convolutional layers with (3x12) kernels are used for feature extraction. Max Pooling layers for downsampling the frequency dimension(a process similar to MFCCs extraction). Dropout layers and Early Stopping for regularization and Dense layers, which have been successfully used for music source separation. The output is a soft mask, thus the final layer is activated by a sigmoid function.
 
 ![Model's Architecture](https://github.com/gelobs/Automated-Audio-Source-Extraction-From-Recordings-Using-Deep-Neural-Networks/blob/main/img/architecture.png?raw=true)
 

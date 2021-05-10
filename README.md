@@ -17,14 +17,14 @@ Note that the current pre-trained model is not fully optimized yet. It can be fu
 
 
 ## Installation
-Use Python 3.8 interpreter in order to get librosa version 8.0 library work smoothly. Use the package manager [pip](https://pip.pypa.io/en/stable/) to install the following packages. See requirements.txt for the exact package versions.
+Use Python 3.8 interpreter in order to get Librosa version 8.0 library work smoothly. Use the package manager [pip](https://pip.pypa.io/en/stable/) to install the following packages. See "requirements.txt" for the exact package versions.
 ```bash
 pip install -Iv tensorflow-gpu==2.4.1
 pip install -Iv librosa==0.8
 pip install -Iv numpy==1.20.1
 pip install -Iv musdb==0.40.0
 ```
-An easier approach is to use [Anaconda](https://www.anaconda.com/) environment. If you use anaconda, install the following
+An easier approach is to use [Anaconda](https://www.anaconda.com/) environment. If you use Anaconda, install the following
 ```bash
 conda install -c conda-forge librosa
 conda install -c conda-forge ffmpeg
@@ -87,7 +87,7 @@ python train.py
 Use "tracks_in_batch" parameter according to your memory restrictions.
  
 ## Usage for Google Colaboratory users
-I mostly worked my diploma thesis using Google Colaboratory. You can find the related code in "Google Colaboratory" folder. You can separate tracks from YouTube using [YoutubeDL](https://github.com/ytdl-org/youtube-dl). I recommend to save MUSDB18 dataset to your Google Drive, then mount it 
+I mostly worked my diploma thesis using Google Colaboratory. You can find the related code in "Google Colaboratory" folder. You can separate tracks from YouTube using [youtube-dl](https://github.com/ytdl-org/youtube-dl). I recommend to save MUSDB18 dataset to your Google Drive, then mount it 
 
 ```python
 from google.colab import drive

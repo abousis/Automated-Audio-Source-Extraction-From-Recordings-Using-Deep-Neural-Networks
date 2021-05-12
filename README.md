@@ -47,7 +47,7 @@ I randomly cut 30 second chunks, downsample to 22.05kHz and apply Short Time Fou
 ![Model's Architecture](https://github.com/gelobs/Automated-Audio-Source-Extraction-From-Recordings-Using-Deep-Neural-Networks/blob/master/img/architecture.png?raw=true)
 
 ## Training
-The model is trained to minimize the binary cross-entropy of between the ideal binary mask and the estimated source in the time-frequency domain for the validation set. The ideal binary mask is created by comparing mixture's and vocals' magnitude spectrograms. 
+The model is trained to minimize the binary cross-entropy of between the ideal binary mask and the model's predictions formed by the sigmoid function of the final layer, in the time-frequency domain for the validation set. The ideal binary mask is created by comparing mixture's and vocals' magnitude spectrograms. 
 
 ## Postprocessing
 Reconstruction of the 9 spectrogram frames, application of the estimated soft masks to magnitude spectrogram and element-wise multiplication(Hadamard product) with the original phase. Thresholds are applied to vocal and accompaniment soft masks to further improve separation. I recommend 0.1-0.2 for vocals and 0.75-0.85 for accompaniment, depending on track. Then I apply inverse Short Time Fourier Transform to reconstruct the signals to time domain, and upsample to 44.1kHz.

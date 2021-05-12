@@ -45,8 +45,8 @@ def estimate_sources(audio):
     accompaniment_soft_mask = 1 - vocals_soft_mask
 
     # Applying thresholds to make signals cleaner
-    vocals_soft_mask[vocals_soft_mask < 0.2] = 0
-    accompaniment_soft_mask[accompaniment_soft_mask < 0.85] = 0
+    vocals_soft_mask[vocals_soft_mask < 0.15] = 0
+    accompaniment_soft_mask[accompaniment_soft_mask < 0.8] = 0
     voc_ft_magn = np.multiply(vocals_soft_mask, mixture_ft_magn)
     acc_ft_magn = np.multiply(accompaniment_soft_mask, mixture_ft_magn)
 

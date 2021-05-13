@@ -6,6 +6,7 @@ import tensorflow.keras
 from time import time
 import os
 
+
 class DataGenerator(tensorflow.keras.utils.Sequence):
     def __init__(self, steps_per_epoch, tracks_in_batch, subsets, split):
         self.steps_per_epoch = steps_per_epoch
@@ -27,26 +28,28 @@ class DataGenerator(tensorflow.keras.utils.Sequence):
         self.chunk_per_track = 323
         self.duration = 30  # 30 sec track chunks
 
-
     def __len__(self):
         return self.steps_per_epoch
-
 
     def __getitem__(self, index):
         mixes = []
         targets = []
 
         # Random mixing batches
-        for i in range(self.tracks_in_batch):
+        i = 0
+        while i < self.tracks_in_batch:
             # Preallocation with zeros
             pad_zero = np.float32(np.zeros((self.freq_bins, self.medium_frame)))  # Zero padding for IBM
-            pad_min = np.float32(np.zeros((self.freq_bins, self.medium_frame)))  # Minimum padding for frames overlapping
+            pad_min = np.float32(
+                np.zeros((self.freq_bins, self.medium_frame)))  # Minimum padding for frames overlapping
             mixture_train_data = np.float32(np.zeros((self.num_ft_bins, self.chunk_per_track)))
             ibm_train_label = np.float32(np.zeros((self.num_ft_bins, self.chunk_per_track)))
 
             mix, target_vocals = self.get_random_track_piece()
             if self.is_source_silent(mix):
                 continue
+
+            i = i + 1
             track_resampled = librosa.core.resample(mix, orig_sr=44100, target_sr=22050)  # Resample to 22050 Hz
             mixture_ft_magn = np.float32(
                 np.abs(librosa.stft(track_resampled, n_fft=4096, hop_length=256, win_length=1024, window='hann')))
@@ -66,10 +69,11 @@ class DataGenerator(tensorflow.keras.utils.Sequence):
             for j in range(self.chunk_per_track):
                 start_index = j * self.hop_num_frames
                 end_index = start_index + self.num_frames
-                mixture_train_data[:, j:j + 1] = np.reshape(mixture_padded[:, start_index:end_index], (self.num_ft_bins, 1),
+                mixture_train_data[:, j:j + 1] = np.reshape(mixture_padded[:, start_index:end_index],
+                                                            (self.num_ft_bins, 1),
                                                             order="F")
                 ibm_train_label[:, j:j + 1] = np.reshape(ibm_padded[:, start_index:end_index], (self.num_ft_bins, 1),
-                                                        order="F")
+                                                         order="F")
 
             mixes = mixes + list(np.transpose(mixture_train_data))
             targets = targets + list(np.transpose(ibm_train_label))
@@ -77,7 +81,6 @@ class DataGenerator(tensorflow.keras.utils.Sequence):
         mix_batch = np.array(mixes)
         target_batch = np.array(targets)
         return mix_batch, target_batch
-
 
     def get_random_track_piece(self):
         # Getting random track
@@ -95,7 +98,6 @@ class DataGenerator(tensorflow.keras.utils.Sequence):
         # Random swapping channels
         channel = random.randint(0, mix.shape[0] - 1)
         return mix[channel], vocals[channel]
-
 
     def is_source_silent(self, source):
         # Returns true if the parameter source is fully silent

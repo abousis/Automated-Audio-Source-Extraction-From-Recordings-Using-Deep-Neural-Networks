@@ -6,7 +6,8 @@ from data_generator import DataGenerator
 from svs_model import svs_model
 
 # Parameters
-TIB = 2  # Tracks in batch for random mixing
+TIB = 1  # Tracks in batch for random mixing
+# TIB = 1 ---> Batch Size = 323 = chunk_per_track
 EPOCHS = 15  # Total epochs
 SPE = 2000  # Steps per epoch
 

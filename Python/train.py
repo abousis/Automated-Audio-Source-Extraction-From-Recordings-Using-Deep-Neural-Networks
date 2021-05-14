@@ -6,14 +6,14 @@ from data_generator import DataGenerator
 from svs_model import svs_model
 
 # Parameters
-TIB = 1  # Tracks in batch for random mixing
-# TIB = 1 ---> Batch Size = 323 = chunk_per_track
+TIB = 4  # Tracks in batch for random mixing
+BS = 128 # Batch size
 EPOCHS = 15  # Total epochs
 SPE = 2000  # Steps per epoch
 
 print('<--[INFO] creating batch generators...')
-train_gen = DataGenerator(SPE, TIB, 'train', 'train')
-valid_gen = DataGenerator(SPE, TIB, 'train', 'valid')
+train_gen = DataGenerator(BS, SPE, TIB, 'train', 'train')
+valid_gen = DataGenerator(BS, SPE, TIB, 'train', 'valid')
 
 print('<--[INFO] creating and compiling model...')
 learning_rate = 1e-4

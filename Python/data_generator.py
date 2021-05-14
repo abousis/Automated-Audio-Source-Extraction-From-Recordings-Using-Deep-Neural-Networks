@@ -8,7 +8,8 @@ import os
 
 
 class DataGenerator(tensorflow.keras.utils.Sequence):
-    def __init__(self, steps_per_epoch, tracks_in_batch, subsets, split):
+    def __init__(self, batch_size, steps_per_epoch, tracks_in_batch, subsets, split):
+        self.batch_size = batch_size
         self.steps_per_epoch = steps_per_epoch
         self.tracks_in_batch = tracks_in_batch
         self.subsets = subsets

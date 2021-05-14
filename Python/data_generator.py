@@ -35,51 +35,63 @@ class DataGenerator(tensorflow.keras.utils.Sequence):
         mixes = []
         targets = []
 
-        # Random mixing batches
+        # Stacking tracks in batch
         i = 0
         while i < self.tracks_in_batch:
             # Preallocation with zeros
-            pad_zero = np.float32(np.zeros((self.freq_bins, self.medium_frame)))  # Zero padding for IBM
-            pad_min = np.float32(
-                np.zeros((self.freq_bins, self.medium_frame)))  # Minimum padding for frames overlapping
+            pad_zero = np.float32(np.zeros((self.freq_bins, self.medium_frame))) #Zero padding for IBM
+            pad_min = np.float32(np.zeros((self.freq_bins, self.medium_frame))) #Minimum padding for frame overlapping
             mixture_train_data = np.float32(np.zeros((self.num_ft_bins, self.chunk_per_track)))
             ibm_train_label = np.float32(np.zeros((self.num_ft_bins, self.chunk_per_track)))
 
+            # Getting random track
             mix, target_vocals = self.get_random_track_piece()
+
+            # Checking if source is silent
             if self.is_source_silent(mix):
                 continue
 
             i = i + 1
-            track_resampled = librosa.core.resample(mix, orig_sr=44100, target_sr=22050)  # Resample to 22050 Hz
-            mixture_ft_magn = np.float32(
-                np.abs(librosa.stft(track_resampled, n_fft=4096, hop_length=256, win_length=1024, window='hann')))
-            pad_min[:, :] = np.float32(min(mixture_ft_magn.min(0)))
+
+            # Resampling mixture to 22.05kHz and obtaining STFT
+            track_resampled = librosa.core.resample(mix, orig_sr=44100,target_sr=22050) 
+            mixture_ft_magn = np.float32(np.abs(librosa.stft(track_resampled, n_fft=4096, hop_length=256, win_length=1024, window='hann'))) 
+
+            # Padding for frame overlapping
+            pad_min[:,:] = np.float32(min(mixture_ft_magn.min(0)))
             mixture_padded = np.concatenate((pad_min, mixture_ft_magn, pad_min), axis=1)
 
-            # Append vocals
+            # Resampling vocals to 22.05kHz and obtaining STFT
             vocals_resampled = librosa.core.resample(target_vocals, orig_sr=44100, target_sr=22050)
-            vocals_ft_magn = np.float32(
-                np.abs(librosa.stft(vocals_resampled, n_fft=4096, hop_length=256, win_length=1024, window='hann')))
+            vocals_ft_magn = np.float32(np.abs(librosa.stft(vocals_resampled, n_fft=4096, hop_length=256, win_length=1024, window='hann')))
 
             # Create Binary Mask
             ideal_binary_mask = (vocals_ft_magn > mixture_ft_magn).astype('float32')
 
             # Concatenation for frame overlapping
-            ibm_padded = np.concatenate((pad_zero, ideal_binary_mask, pad_zero), axis=1)
+            ibm_padded = np.concatenate((pad_zero, ideal_binary_mask, pad_zero),axis=1)
             for j in range(self.chunk_per_track):
-                start_index = j * self.hop_num_frames
-                end_index = start_index + self.num_frames
-                mixture_train_data[:, j:j + 1] = np.reshape(mixture_padded[:, start_index:end_index],
-                                                            (self.num_ft_bins, 1),
-                                                            order="F")
-                ibm_train_label[:, j:j + 1] = np.reshape(ibm_padded[:, start_index:end_index], (self.num_ft_bins, 1),
-                                                         order="F")
+                        start_index = j*self.hop_num_frames
+                        end_index = start_index + self.num_frames
+                        mixture_train_data[:,j:j+1] = np.reshape(mixture_padded[:,start_index:end_index],(self.num_ft_bins,1), order="F")
+                        ibm_train_label[:,j:j+1] = np.reshape(ibm_padded[:,start_index:end_index],(self.num_ft_bins,1), order="F")
 
+            # Stacking tracks in chunks
             mixes = mixes + list(np.transpose(mixture_train_data))
             targets = targets + list(np.transpose(ibm_train_label))
 
-        mix_batch = np.array(mixes)
-        target_batch = np.array(targets)
+        mix_chunk = np.array(mixes)
+        target_chunk = np.array(targets)
+
+        # Random shuffling chunks
+        row_idxs = np.random.permutation(mix_chunk.shape[0])
+        mix_chunk = mix_chunk[row_idxs, :]
+        target_chunk = target_chunk[row_idxs, :]
+
+        # Choosing batches randomly
+        index = random.randint(0, mix_chunk.shape[0]//self.batch_size - 1)
+        mix_batch = mix_chunk[index * self.batch_size : (index + 1) * self.batch_size]
+        target_batch = target_chunk[index * self.batch_size : (index + 1) * self.batch_size]
         return mix_batch, target_batch
 
     def get_random_track_piece(self):

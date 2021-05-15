@@ -5,7 +5,7 @@ import os
 import musdb
 
 base_dir = os.path.dirname(os.path.realpath(__file__))
-model_dir = "../Models/model_v2.h5" # Load pre-trained model
+model_dir = "../Models/model.h5" # Load trained model
 model = tf.keras.models.load_model(os.path.join(base_dir, model_dir), compile=False)
 
 @staticmethod

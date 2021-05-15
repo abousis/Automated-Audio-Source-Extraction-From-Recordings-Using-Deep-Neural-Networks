@@ -1,11 +1,11 @@
 # Automated Audio Source Extraction From Recordings Using Deep Neural Networks
-This repository contains an updated code version, related to my diploma thesis "[Automated Audio Source Extraction From Recordings Using Deep Neural Networks](https://angelosbousis.azurewebsites.net/api/PdfFile?filePath=~%2Ffile%2Fthesis_angelos_bousis.pdf)"(in Greek) supervised by prof. [Nikolaos Mitianoudis](https://utopia.duth.gr/nmitiano/index.html). This repo covers the case of Singing Voice Separation problem. The main difference between this and my initial implementation is the creation of the dataset. 
+This repository contains an updated code version, related to my diploma thesis "[Automated Audio Source Extraction From Recordings Using Deep Neural Networks](https://angelosbousis.azurewebsites.net/api/PdfFile?filePath=~%2Ffile%2Fthesis_angelos_bousis.pdf)"(in Greek) supervised by prof. [Nikolaos Mitianoudis](https://utopia.duth.gr/nmitiano/index.html). This repo covers the case of Singing Voice Separation problem. The main difference between this and my initial implementation is the creation of the dataset. For the initial implementation I used [h5py](https://www.h5py.org/) library to create a static dataset, whereas here I present a method to randomly generate data.
 
 ## Deep Learning Frameworks and Libraries
 For this implementation I used Tensorflow v2.4.1 and Keras Functional API.
 
 ## Output examples
-Here are some output examples extracted using my pre-trained model which is provided in this repository. The music tracks are the following 
+Here are some output examples extracted using my method. The music tracks are the following 
 
 [Ιουλία Καραπατάκη - Μπιρ Αλλάχ (exact time interval 90-120 sec.)](https://www.youtube.com/watch?v=nv2rp5JCWj0) - [Vocals](https://drive.google.com/file/d/195HOyaQi12PSyn3J7ry-Bx7IEKuBjDfE/view?usp=sharing) - [Accompaniment](https://drive.google.com/file/d/1--TvTstFaiiHsO5zYySpYlGQy-5W5TAC/view?usp=sharing) <br />
 [Villagers of Ioannina City - Perdikomata (exact time interval 360-390 sec.)](https://www.youtube.com/watch?v=MsCB4iocPJE) - [Vocals](https://drive.google.com/file/d/1-JkdoGPFZ5hy31A6OGR58o1mzWJfC3j5/view?usp=sharing) - [Accompaniment](https://drive.google.com/file/d/1-GNxHFLwEoq1GabRHUZXmWUqKftQxN2z/view?usp=sharing) <br />
@@ -39,10 +39,10 @@ First, you have to download [MUSDB18](https://sigsep.github.io/datasets/musdb.ht
 This method borrows much from these two papers [1](https://pdfs.semanticscholar.org/41f0/973c0777f6da3b47fa035aa0bc071c8f02f8.pdf?_ga=2.214795095.1524381320.1605807192-246561933.1601815407), [2](https://arxiv.org/pdf/1812.01278.pdf). 
 
 ## Preprocessing
-I randomly cut 30 second chunks, downsample to 22.05kHz and apply Short Time Fourier Transform to time domain signals. Then I feed the model with 9 overlapping magnitude spectograms. Their overlap is 1 frame.
+I randomly cut 30 second chunks, downsample to 22.05kHz and apply Short Time Fourier Transform to time domain signals. Then I feed the model with 9 overlapping magnitude spectograms. Their overlap is 1 frame. Also, I random mixing channels and batches for data augmentation and better generalization overall.
 
 ## Architecture
-2D Convolutional layers with (3x12) kernels are used for feature extraction. Max Pooling layers for downsampling the frequency dimension(a process similar to MFCCs extraction). Dropout layers and Early Stopping for regularization and Dense layers, which have been successfully used for music source separation. The output is a soft mask, thus the final layer is activated by a sigmoid function.
+2D Convolutional layers with (3x12) kernels are used for feature extraction. Max Pooling layers for downsampling the frequency dimension(a process similar to MFCCs extraction). Dropout layers and Early Stopping for regularization and Dense layers, which have been successfully used for audio source separation. The output is a soft mask, thus the final layer is activated by a sigmoid function.
 
 ![Model's Architecture](https://github.com/gelobs/Automated-Audio-Source-Extraction-From-Recordings-Using-Deep-Neural-Networks/blob/master/img/architecture.png?raw=true)
 
@@ -84,7 +84,7 @@ To train model run
 python train.py
 ```
 
-Use "tracks_in_batch" parameter according to your memory restrictions.
+Use "batch_size" parameter according to your memory restrictions.
  
 ## Usage for Google Colaboratory users
 I mostly worked my diploma thesis using Google Colaboratory. You can find the related code in "Google Colaboratory" folder. You can separate tracks from YouTube using [youtube-dl](https://github.com/ytdl-org/youtube-dl). I recommend to save MUSDB18 dataset to your Google Drive, then mount it 
@@ -102,14 +102,17 @@ Currently if you have a pro subscription at Google Colaboratory, you will be abl
 checkpoint_path = "your-model-saving-path-to-gdrive/model.h5"
 tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path, monitor='val_binary_crossentropy',verbose=1, save_best_only=True, mode='min')
 ```
-Use "steps per epoch" parameter according to the training time limit.
+Use "steps_per_epoch" parameter according to the training time limit.
+
+## Batch size
+Generally, when using a GPU, selecting batch size as power of 2, leads to better execution times. Furthermore bigger batch sizes can lead to better gradient estimation. I recommend to select a power of 2 batch size number between 8-512, according to your memory restrictions.
 
 ## Important note
 When loading a model with
 ```python
 model = tf.keras.models.load_model("path-to-model", compile=False)
 ```
-the Tensorflow versions should match, i.e. if you use Tensorflow v2.4.1 when training the model and try to load model using Tensorflow v2.2. you will possibly get an error. The pre-built model is created with Tensorflow v2.4.1.
+the Tensorflow versions should match, i.e. if you use Tensorflow v2.4.1 when training the model and try to load model using Tensorflow v2.2. you will possibly get an error. At publishing time, model was created with Tensorflow v2.4.1.
 
 ## Acknowledgements
 This repository borrows many ideas from the following

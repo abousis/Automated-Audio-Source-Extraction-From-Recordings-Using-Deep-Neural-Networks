@@ -79,7 +79,8 @@ def estimate_sources(audio):
 # audio = librosa.to_mono(track.audio.T)
 # estimates = estimate_sources(audio)
 
+# import soundfile as sf
 # Write vocals
-# librosa.output.write_wav(base_dir + "/vocals.wav", y=estimates['vocals'], sr=44100)
+# sf.write(base_dir + "/vocals.wav", estimates['vocals'], 44100, subtype='PCM_24')
 # Write accompaniment
-# librosa.output.write_wav(base_dir + "/accompaniment.wav", y=estimates['accompaniment'], sr=44100)
+# sf.write(base_dir + "/accompaniment.wav", estimates['accompaniment'], 44100, subtype='PCM_24')

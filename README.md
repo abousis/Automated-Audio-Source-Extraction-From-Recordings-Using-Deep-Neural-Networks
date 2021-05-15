@@ -2,7 +2,7 @@
 This repository contains an updated code version, related to my diploma thesis "[Automated Audio Source Extraction From Recordings Using Deep Neural Networks](https://angelosbousis.azurewebsites.net/api/PdfFile?filePath=~%2Ffile%2Fthesis_angelos_bousis.pdf)"(in Greek) supervised by prof. [Nikolaos Mitianoudis](https://utopia.duth.gr/nmitiano/index.html). This repo covers the case of Singing Voice Separation problem. The main difference between this and my initial implementation is the creation of the dataset. For the initial implementation I used [h5py](https://www.h5py.org/) library to create a static dataset, whereas here I present a method to randomly generate data.
 
 ## Deep Learning Frameworks and Libraries
-For this implementation I used Tensorflow v2.4.1 and Keras Functional API.
+For this implementation I used [Tensorflow](https://www.tensorflow.org/) v2.4.1 and [Keras](https://keras.io/) Functional API.
 
 ## Output examples
 Here are some output examples extracted using my method. The music tracks are the following 

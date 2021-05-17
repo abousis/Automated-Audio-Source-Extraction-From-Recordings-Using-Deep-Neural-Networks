@@ -10,7 +10,7 @@ musdb_folder = "../Dataset/musdb18"
 mus_test = musdb.DB(root=os.path.join(dir_path, musdb_folder), subsets='test')
 
 # Loading autoencoder model
-model = tf.keras.models.load_model('Train Checkpoints/train.h5')
+model = tf.keras.models.load_model(os.path.join(dir_path, 'Train Checkpoints/train.h5'))
 
 def estimate_and_evaluate(track):
   # Converting to mono, resampling and obtaining STFT

@@ -15,7 +15,7 @@ test_data = data['test']
 test_labels = data['test_label']
 
 # Loading autoencoder model
-model = tf.keras.models.load_model('Autoencoder Checkpoints/autoencoder.h5')
+model = tf.keras.models.load_model(os.path.join(dir_path, 'Autoencoder Checkpoints/autoencoder.h5'))
 
 # Printing model's layout
 model.summary()

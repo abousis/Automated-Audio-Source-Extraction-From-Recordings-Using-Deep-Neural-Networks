@@ -42,10 +42,10 @@ def estimate_and_evaluate(track):
   # Estimating soft masks
   vocals_soft_mask = np.zeros((freq_bins, time_bins))
   for i in range(time_bins):
-      predictions = model.predict(input) # Neural net's output
+      predictions = model.predict(input[i:i + 1, :]) # Neural net's output
       pred = tf.math.sigmoid(predictions) # Apply sigmoid because last layer's activation was 'None'
       predictions = pred.numpy() # Casting to numpy array
-      temp_soft_mask = np.transpose(np.reshape(model.predict(input[i:i + 1, :]), (num_frames, freq_bins)))
+      temp_soft_mask = np.transpose(np.reshape(predictions, (num_frames, freq_bins)))
       vocals_soft_mask[:, i] = temp_soft_mask[:, medium_frame]
   accompaniment_soft_mask = 1 - vocals_soft_mask
 

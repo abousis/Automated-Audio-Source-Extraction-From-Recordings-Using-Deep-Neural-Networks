@@ -8,7 +8,7 @@ base_dir = os.path.dirname(os.path.realpath(__file__))
 model_dir = "../Models/model.h5" # Load trained model
 model = tf.keras.models.load_model(os.path.join(base_dir, model_dir), compile=False)
 
-@staticmethod
+
 def estimate_sources(audio):
     # Resampling to 22.05 kHz
     channel = librosa.core.resample(audio, orig_sr=44100, target_sr=22050)

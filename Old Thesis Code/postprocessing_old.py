@@ -141,7 +141,7 @@ print('mean sir',np.mean(sir_list, axis=0))
 print('mean sar',np.mean(sar_list, axis=0))
 
 # Printing standard deviation
-print('std metrics: vocals, bass, drums, other')
+print('std metrics: vocals, accompaniment')
 print('std sdr',np.std(sdr_list, axis=0))
 print('std sir',np.std(sir_list, axis=0))
 print('std sar',np.std(sar_list, axis=0))
